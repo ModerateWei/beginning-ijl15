@@ -1664,3 +1664,45 @@ __declspec(naked) void skillToolTipNew()
 		jmp skillToolTipNewRtn
 	}
 }
+
+// ===== 2026-09-08 AMP "system crit" (client-side) =====
+// Mages whose magic hit is actually boosted by one of the Elemental
+// Amplification skills (FP 2110001 / IL 2210001 / Blaze Wizard 12110001) get a
+// ~30% chance that this hit is multiplied x1.6 more, right before the output-cap
+// compare at MapleStroy.exe 0x791F8B (magic-damage method entry 0x791617).
+// Discriminator: the per-attack factor that the client computes for the hit and
+// keeps at [ebp-0x38] (result of the amp fn 0x765771) = 100 when NO amp applies,
+// >100 (e.g. 140) when an amp enhances this hit. So the cave rolls only when that
+// factor is >100. (Earlier live tests proved no-amp magic carries exactly 100.)
+// ROLL: low 28 bits of rdtsc < 0x4CCCCCC (~30%). Tail re-runs the overwritten
+// fcom so cap compare and FPU flags match the stock path, returns to 0x791F91.
+double gAmpMul = 1.6;   // official crit multiplier (verified live: gate [ebp-0x38]>100 + 30% roll)
+double gAmpDmgSlot;
+__declspec(naked) void AmpCritHook()
+{
+	__asm {
+		push edi
+		push esi
+		push ebx
+		fstp qword ptr[gAmpDmgSlot]
+		mov eax, dword ptr[ebp - 38h]
+		cmp eax, 100
+		jle L_AmpNo
+		rdtsc
+		and eax, 0x0FFFFFFF
+		cmp eax, 0x4CCCCCC
+		jae L_AmpNo
+		fld qword ptr[gAmpMul]
+		fmul qword ptr[gAmpDmgSlot]
+		jmp L_AmpOut
+	L_AmpNo:
+		fld qword ptr[gAmpDmgSlot]
+	L_AmpOut:
+		fcom qword ptr ds:[0x00AFE8A0]
+		pop ebx
+		pop esi
+		pop edi
+		push 0x00791F91
+		ret
+	}
+}

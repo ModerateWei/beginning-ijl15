@@ -154,6 +154,7 @@ void Client::UpdateGameStartup() {
 	Memory::WriteInt(0x007918FC + 1, 2147483646); //CalcDamage::MDamage 999，意义不明，int 4字节
 
 	Memory::WriteDouble(0x00AFE8A0, setAtkOutCap);	// 输出显示上限，默认199999，double 8字节
+	Memory::CodeCave(AmpCritHook, 0x00791F8B, 6);	// AMP system-crit (final): x1.6 @ ~30% when [ebp-0x38](amp factor)>100
 
 
 	Memory::WriteInt(0x00780743 + 3, speedMovementCap); //set speed cap //ty ronan
