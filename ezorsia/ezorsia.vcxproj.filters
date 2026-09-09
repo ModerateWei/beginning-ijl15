@@ -156,6 +156,12 @@
     <ClInclude Include="SelectCharMacFix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\recovered\WzUiBridge.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\recovered\WorldMapRichTooltip.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -189,6 +195,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SelectCharMacFix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recovered\WzUiBridge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recovered\WorldMapRichTooltip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

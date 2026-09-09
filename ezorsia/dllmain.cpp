@@ -9,6 +9,7 @@
 #include "EquipCompare.h"
 #include "HpMpAlert.h"
 #include "SelectCharMacFix.h"
+#include "../recovered/WorldMapRichTooltip.hpp"
 #pragma comment(lib, "ws2_32.lib")
 
 // config.ini can use IP or hostname (ServerIP_Address=...).
@@ -67,6 +68,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	{
 		//CreateConsole();	//console for devs, use this to log stuff if you want
 		INIReader reader("config.ini");
+		recovered::worldmap::Settings worldMapSettings;
 		if (reader.ParseError() == 0) {
 			Client::m_nGameWidth = reader.GetInteger("general", "width", 1280);
 			Client::m_nGameHeight = reader.GetInteger("general", "height", 720);
@@ -99,6 +101,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::talkTime = reader.GetInteger("optional", "talkTime", 2000);
 			EquipCompare::SetEnabled(reader.GetBoolean("equipcompare", "enabled", true));
 			EquipCompare::SetGap(reader.GetInteger("equipcompare", "gap", 2));
+			worldMapSettings.originX = reader.GetInteger("worldmap", "worldMapOriginX", 3);
+			worldMapSettings.originY = reader.GetInteger("worldmap", "worldMapOriginY", 30);
+			worldMapSettings.hitRadius = reader.GetInteger("worldmap", "worldMapHitRadius", 12);
+			worldMapSettings.richTooltip = reader.GetBoolean("worldmap", "richTooltip", true);
+			worldMapSettings.debugLog = reader.GetBoolean("debug", "worldMapLog", false);
 		}
 
 		Hook_CreateMutexA(true); //multiclient //ty darter, angel, and alias!
@@ -139,6 +146,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		BossHP::Hook();
 		EquipCompare::Hook();
 		Client::WorldMap();
+		recovered::worldmap::Install(worldMapSettings, &Memory::SetHook);
 		Client::RefreshRate(); 
 		Client::DeleteChar();
 		std::cout << "GetModuleFileName hook created" << std::endl;

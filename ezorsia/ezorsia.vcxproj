@@ -205,6 +205,8 @@
     <ClInclude Include="Memory.h" />
     <ClInclude Include="NMCO.h" />
     <ClInclude Include="SelectCharMacFix.h" />
+    <ClInclude Include="..\recovered\WzUiBridge.hpp" />
+    <ClInclude Include="..\recovered\WorldMapRichTooltip.hpp" />
     <ClInclude Include="AutoTypes.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -222,6 +224,15 @@
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="NMCO.cpp" />
     <ClCompile Include="SelectCharMacFix.cpp" />
+    <ClCompile Include="..\recovered\WzUiBridge.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="..\recovered\WorldMapRichTooltip.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
