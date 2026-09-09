@@ -6,6 +6,7 @@
 #include "ReplacementFuncs.h"
 #include <comutil.h>
 #include "BossHP.h"
+#include "EquipCompare.h"
 #include "HpMpAlert.h"
 #include "SelectCharMacFix.h"
 #pragma comment(lib, "ws2_32.lib")
@@ -96,6 +97,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::climbSpeed = reader.GetFloat("optional", "climbSpeed", 1.0);
 			Client::talkRepeat = reader.GetBoolean("optional", "talkRepeat", false);
 			Client::talkTime = reader.GetInteger("optional", "talkTime", 2000);
+			EquipCompare::SetEnabled(reader.GetBoolean("equipcompare", "enabled", true));
+			EquipCompare::SetGap(reader.GetInteger("equipcompare", "gap", 2));
 		}
 
 		Hook_CreateMutexA(true); //multiclient //ty darter, angel, and alias!
@@ -134,6 +137,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		Client::NoPassword();
 		Client::MoreHook();
 		BossHP::Hook();
+		EquipCompare::Hook();
 		Client::WorldMap();
 		Client::RefreshRate(); 
 		Client::DeleteChar();
